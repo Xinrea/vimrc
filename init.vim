@@ -10,7 +10,7 @@ set undofile
 set hidden
 let mapleader=' '
 nnoremap <SPACE> <Nop>
-nnoremap <leader> <c-w>w
+nnoremap <leader>w <c-w>w
 tnoremap <Esc> <C-\><C-n>
 
 call plug#begin('~/.config/nvim/plugged')
@@ -22,7 +22,21 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'tpope/vim-fugitive'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'akinsho/toggleterm.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'yaegassy/coc-volar', {'do': 'yarn install --frozen-lockfile'}
+Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
+" Plug 'ryanoasis/vim-devicons' Icons without colours
+Plug 'akinsho/bufferline.nvim'
 call plug#end()
+
+set termguicolors
+lua << EOF
+require("bufferline").setup{}
+EOF
+
+" Bufferline settings
+nnoremap <silent>[b :BufferLineCycleNext<CR>
+nnoremap <silent>b] :BufferLineCyclePrev<CR>
 
 colorscheme neon
 
@@ -55,3 +69,11 @@ let g:go_auto_type_info = 1
 set updatetime=50
 
 nnoremap <leader>s :ToggleTerm direction=float<CR>
+
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+au BufWinEnter * match ExtraWhitespace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhitespace /\s\+$/
+au BufWinLeave * call clearmatches()
