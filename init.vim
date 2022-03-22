@@ -8,6 +8,7 @@ set expandtab
 set shiftwidth=2
 set undofile
 set hidden
+set completeopt-=preview
 let mapleader=' '
 nnoremap <SPACE> <Nop>
 nnoremap <leader>w <c-w>w
@@ -35,17 +36,19 @@ require("bufferline").setup{}
 EOF
 
 " Bufferline settings
-nnoremap <silent>[b :BufferLineCycleNext<CR>
-nnoremap <silent>b] :BufferLineCyclePrev<CR>
+nnoremap <silent><leader>] :BufferLineCycleNext<CR>
+nnoremap <silent><leader>[ :BufferLineCyclePrev<CR>
 
 colorscheme neon
 
 let g:deoplete#enable_at_startup = 1
 
 " NerdTree settings
+" NerdTree settings
 nnoremap <leader>n :NERDTreeFocus<CR>
-autocmd VimEnter * NERDTree | wincmd p
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+" Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 " Go settings
