@@ -11,7 +11,9 @@ set undofile
 set hidden
 set clipboard+=unnamedplus
 set completeopt-=preview
-set background=light
+set background=dark
+syntax enable
+filetype plugin indent on
 let mapleader=' '
 nnoremap <SPACE> <Nop>
 nnoremap <leader>w <c-w>w
@@ -29,6 +31,7 @@ Plug 'akinsho/toggleterm.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'yaegassy/coc-volar', {'do': 'yarn install --frozen-lockfile'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+Plug 'rust-lang/rust.vim'
 Plug 'chun-yang/auto-pairs'
 Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
 " Plug 'ryanoasis/vim-devicons' Icons without colours
