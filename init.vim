@@ -28,6 +28,7 @@ Plug 'yaegassy/coc-volar', {'do': 'yarn install --frozen-lockfile'}
 Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
 " Plug 'ryanoasis/vim-devicons' Icons without colours
 Plug 'akinsho/bufferline.nvim'
+Plug 'octol/vim-cpp-enhanced-highlight'
 call plug#end()
 
 set termguicolors
@@ -82,3 +83,11 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 au BufWinLeave * call clearmatches()
 
 let NERDTreeShowHidden=1
+
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+
