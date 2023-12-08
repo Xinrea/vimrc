@@ -5,113 +5,123 @@ set relativenumber
 set cursorline
 set tabstop=2
 set softtabstop=2
-set expandtab
 set shiftwidth=2
+set expandtab
+set mouse=
 set undofile
 set hidden
 set clipboard+=unnamedplus
-set completeopt-=preview
 set background=dark
+set completeopt-=preview
+set list
+set listchars=space:·,trail:·
+set colorcolumn=120
 syntax enable
 filetype plugin indent on
 let mapleader=' '
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
 nnoremap <SPACE> <Nop>
 nnoremap <leader>w <c-w>w
+nnoremap <leader>x :bp<cr>:bd #<cr>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>f :Files<cr>
+nnoremap <leader>g :Ag
 tnoremap <Esc> <C-\><C-n>
 
+let g:plug_url_format = 'git@github.com:%s.git'
 call plug#begin('~/.config/nvim/plugged')
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'github/copilot.vim'
-Plug 'morhetz/gruvbox'
 Plug 'preservim/nerdtree'
 Plug 'airblade/vim-gitgutter'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'tpope/vim-fugitive'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'akinsho/toggleterm.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'yaegassy/coc-volar', {'do': 'yarn install --frozen-lockfile'}
+Plug 'tpope/vim-fugitive'
+Plug 'akinsho/toggleterm.nvim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
-Plug 'rust-lang/rust.vim'
-Plug 'chun-yang/auto-pairs'
-Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
-" Plug 'ryanoasis/vim-devicons' Icons without colours
 Plug 'akinsho/bufferline.nvim'
-Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'wellle/context.vim'
+Plug 'ncm2/float-preview.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
 
 set termguicolors
-lua << EOF
-require("bufferline").setup{}
-EOF
+colorscheme dracula
 
-" Bufferline settings
 nnoremap <silent><leader>] :BufferLineCycleNext<CR>
 nnoremap <silent><leader>[ :BufferLineCyclePrev<CR>
 
-colorscheme gruvbox
 
-let g:deoplete#enable_at_startup = 1
-
-" NerdTree settings
-" NerdTree settings
-nnoremap <leader>n :NERDTreeFocus<CR>
+let NERDTreeIgnore=["\.git$", ".vscode", ".idea"]
+nnoremap <leader>n :NERDTreeToggle<CR>
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-" Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
-" Go settings
-call deoplete#custom#option('omni_patterns', { 'go': '[^. *\t]\.\w*' })
 map <C-n> :cnext<CR>
 map <C-m> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
-let g:go_fmt_command = "gofmt"
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
-let g:go_metalinter_command='golangci-lint'
-let g:go_metalinter_autosave = 1
-let g:go_metalinter_deadline = "5s"
-let g:go_metalinter_autosave_enabled = ['vet']
-let g:go_list_type = "quickfix"
-autocmd FileType go nmap <leader>i <Plug>(go-doc)
-let g:go_auto_type_info = 1
-set updatetime=50
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+set updatetime=700
 
 nnoremap <leader>s :ToggleTerm direction=float<CR>
 
-" Useless spaces
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-au BufWinEnter * match ExtraWhitespace /\s\+$/
-au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-au InsertLeave * match ExtraWhitespace /\s\+$/
-au BufWinLeave * call clearmatches()
-
 let NERDTreeShowHidden=1
 
-let g:cpp_class_scope_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_class_decl_highlight = 1
-let g:cpp_posix_standard = 1
-let g:cpp_experimental_simple_template_highlight = 1
-let g:cpp_concepts_highlight = 1
+let g:float_preview#docked = 0
 
-" Snippets
-" Use <C-l> for trigger snippet expand.
-imap <C-l> <Plug>(coc-snippets-expand)
+autocmd Filetype cpp setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
-" Use <C-j> for select text for visual placeholder of snippet.
-vmap <C-j> <Plug>(coc-snippets-select)
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-" Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<c-j>'
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<c-k>'
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-" Use <C-j> for both expand and jump (make expand higher priority.)
-imap <C-j> <Plug>(coc-snippets-expand-jump)
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code
+xmap <leader>F  <Plug>(coc-format-selected)
+nmap <leader>F  <Plug>(coc-format-selected)
+
+lua << EOF
+require("bufferline").setup{}
+require("toggleterm").setup{}
+EOF
