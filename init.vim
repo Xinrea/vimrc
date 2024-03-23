@@ -14,7 +14,7 @@ set clipboard+=unnamedplus
 set background=dark
 set completeopt-=preview
 set list
-set listchars=space:·,trail:·
+set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
 set colorcolumn=120
 syntax enable
 filetype plugin indent on
