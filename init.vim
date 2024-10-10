@@ -63,7 +63,7 @@ map <C-n> :cnext<CR>
 map <C-m> :cprevious<CR>
 nnoremap <leader>a :cclose<CR>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-set updatetime=700
+set updatetime=500
 
 nnoremap <leader>s :ToggleTerm direction=float<CR>
 
@@ -100,8 +100,8 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call ShowDocumentation()<CR>
+" Use <leader>d to show documentation in preview window
+nnoremap <leader>d :call ShowDocumentation()<CR>
 
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
@@ -113,6 +113,9 @@ endfunction
 
 " Highlight the symbol and its references when holding the cursor
 autocmd CursorHold * silent call CocActionAsync('highlight')
+" clean up highlight
+nnoremap <silent> <esc> :nohl<cr>
+
 
 " Symbol renaming
 nmap <leader>rn <Plug>(coc-rename)
