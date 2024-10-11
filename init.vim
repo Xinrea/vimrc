@@ -34,7 +34,9 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'github/copilot.vim'
-Plug 'preservim/nerdtree'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'MunifTanjim/nui.nvim'
+Plug 'nvim-neo-tree/neo-tree.nvim'
 Plug 'airblade/vim-gitgutter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-fugitive'
@@ -53,11 +55,8 @@ nnoremap <silent><leader>] :BufferLineCycleNext<CR>
 nnoremap <silent><leader>[ :BufferLineCyclePrev<CR>
 
 
-let NERDTreeIgnore=["\.git$", ".vscode", ".idea"]
-nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>n :Neotree<CR>
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 map <C-n> :cnext<CR>
 map <C-m> :cprevious<CR>
@@ -127,4 +126,9 @@ nmap <leader>F  <Plug>(coc-format-selected)
 lua << EOF
 require("bufferline").setup{}
 require("toggleterm").setup{}
+require("neo-tree").setup({
+  window = {
+    position = "float",
+  }
+})
 EOF
