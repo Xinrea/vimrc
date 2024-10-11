@@ -31,8 +31,6 @@ tnoremap <Esc> <C-\><C-n>
 let g:plug_url_format = 'git@github.com:%s.git'
 call plug#begin('~/.config/nvim/plugged')
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 Plug 'github/copilot.vim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'MunifTanjim/nui.nvim'
@@ -54,7 +52,6 @@ colorscheme dracula
 nnoremap <silent><leader>] :BufferLineCycleNext<CR>
 nnoremap <silent><leader>[ :BufferLineCyclePrev<CR>
 
-
 nnoremap <leader>n :Neotree<CR>
 autocmd StdinReadPre * let s:std_in=1
 
@@ -65,8 +62,6 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 set updatetime=500
 
 nnoremap <leader>s :ToggleTerm direction=float<CR>
-
-let NERDTreeShowHidden=1
 
 let g:float_preview#docked = 0
 
@@ -120,8 +115,8 @@ nnoremap <silent> <esc> :nohl<cr>
 nmap <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code
-xmap <leader>F  <Plug>(coc-format-selected)
-nmap <leader>F  <Plug>(coc-format-selected)
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
 
 lua << EOF
 require("bufferline").setup{}
